@@ -31,11 +31,18 @@ pipeline {
         stage('Deploy') {
             steps {
                 sh '''
+                docker network create red-web || true
                 docker rm -f web || true
-                docker run -d --name web --restart unless-stopped -p 8081:8080 \
-                  --read-only --tmpfs /tmp --tmpfs /var/cache/nginx --tmpfs /var/run \
+                docker run -d --name web --network red-web --restart unless-stopped \
+                  -p 8081:8080 \
+                  --read-only \
+                  --tmpfs /tmp:uid=101,gid=101 \
+                  --tmpfs /var/cache/nginx:uid=101,gid=101 \
+                  --tmpfs /var/run:uid=101,gid=101 \
                   --cap-drop ALL --security-opt no-new-privileges \
                   $IMAGE:$TAG
+                sleep 5
+                curl -f http://localhost:8081/
                 '''
             }
         }
