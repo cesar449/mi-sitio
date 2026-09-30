@@ -17,8 +17,13 @@ pipeline {
                 sh '''
                 docker rm -f test-$BUILD_NUMBER || true
                 docker run -d --name test-$BUILD_NUMBER -p 9090:8080 $IMAGE:$TAG
-                sleep 3
-                curl -f http://localhost:9090/
+                for i in $(seq 1 20); do
+                  curl -sf http://localhost:9090/ > /dev/null && exit 0
+                  sleep 2
+                done
+                echo "El sitio no respondio a tiempo"
+                docker logs test-$BUILD_NUMBER
+                exit 1
                 '''
             }
             post { always { sh 'docker rm -f test-$BUILD_NUMBER || true' } }
@@ -41,8 +46,13 @@ pipeline {
                   --tmpfs /var/run:uid=101,gid=101 \
                   --cap-drop ALL --security-opt no-new-privileges \
                   $IMAGE:$TAG
-                sleep 5
-                curl -f http://localhost:8081/
+                for i in $(seq 1 20); do
+                  curl -sf http://localhost:8081/ > /dev/null && exit 0
+                  sleep 2
+                done
+                echo "El despliegue no respondio a tiempo"
+                docker logs web
+                exit 1
                 '''
             }
         }
