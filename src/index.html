@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mi Sitio Seguro</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header><h1>Mi Sitio en Contenedor</h1></header>
+  <main>
+    <p>Sitio desplegado con Docker y Jenkins (CI/CD).</p>
+    <form id="contacto">
+      <label for="nombre">Nombre</label>
+      <input id="nombre" type="text" required maxlength="50" pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ ]+">
+      <label for="correo">Correo</label>
+      <input id="correo" type="email" required maxlength="80">
+      <label for="mensaje">Mensaje</label>
+      <textarea id="mensaje" required maxlength="300"></textarea>
+      <button type="submit">Enviar</button>
+      <p id="resultado"></p>
+    </form>
+  </main>
+  <script src="js/app.js"></script>
+</body>
+</html>
