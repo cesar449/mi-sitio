@@ -16,9 +16,9 @@ pipeline {
             steps {
                 sh '''
                 docker rm -f test-$BUILD_NUMBER || true
-                docker run -d --name test-$BUILD_NUMBER -p 9090:8080 $IMAGE:$TAG
+                docker run -d --name test-$BUILD_NUMBER -p 9191:8080 $IMAGE:$TAG
                 for i in $(seq 1 20); do
-                  curl -sf http://localhost:9090/ > /dev/null && exit 0
+                  curl -sf http://localhost:9191/ > /dev/null && exit 0
                   sleep 2
                 done
                 echo "El sitio no respondio a tiempo"
