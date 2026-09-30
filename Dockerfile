@@ -4,8 +4,9 @@ RUN apk upgrade --no-cache \
     && rm -rf /usr/share/nginx/html/*
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY src/ /usr/share/nginx/html/
-RUN mkdir -p /var/cache/nginx /var/run \
-    && chown -R nginx:nginx /var/cache/nginx /var/run /usr/share/nginx/html
+RUN mkdir -p /var/cache/nginx \
+    && chown -R nginx:nginx /var/cache/nginx /usr/share/nginx/html \
+    && sed -i 's#/run/nginx.pid#/tmp/nginx.pid#' /etc/nginx/nginx.conf
 USER nginx
 EXPOSE 8080
 HEALTHCHECK --interval=15s --timeout=3s --start-period=5s --retries=3 \
